@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CFunction.cpp" />
     <ClCompile Include="InteropCpp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CFunction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

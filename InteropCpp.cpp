@@ -1,8 +1,7 @@
 // InteropCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #include <iostream>
-#include <functional>
-#include <Windows.h>
+#include "CFunction.h"
 
 void test_no_args() {
 	std::cout << "Hello from test without args" << std::endl;
@@ -49,12 +48,66 @@ void runFunc(int argc, int* args) {
 
 }
 
+void __stdcall test(int a, int b) {
+	std::cout << "Got integer: " << a << std::endl;
+	std::cout << "Got float: " << b << std::endl;
+}
+
+class ex {
+public:
+	void stuff() {
+		std::cout << "Hello from stuff #" << (this) << std::endl;
+	}
+};
+
+void __stdcall objtest(ex* e) {
+	e->stuff();
+}
+
+int __stdcall t1() {
+	return 1;
+}
+
+void __stdcall t2() {
+
+}
+
 int main() {
 
-	int args[2];
-	args[0] = 11;
-	args[1] = 5;
-	runFunc(2, args);
+	/*CallArgs args;
+	args.args = new CallArg[2];
+	args.args[0] = CallArg(1);
+	args.args[1] = CallArg(-3);
+	args.count = 2;
+
+	Invoke(test, args);
+
+	delete[] args.args;
+
+	args.count = 1;
+	args.args = new CallArg[1];
+	args.args[0] = CallArg(new ex());
+
+	Invoke(objtest, args);*/
+
+	auto t1a = &t1;
+	auto t2a = &t2;
+
+	int rt1 = 26;
+	int rt2 = 26;
+
+	__asm { // fetch return value
+		call [t1a]
+		mov [rt1], eax
+	}
+
+	__asm { // void ==> ignore return value
+		call[t2a]
+		xor eax, eax
+	}
+
+	std::cout << rt1 << std::endl;
+	std::cout << rt2 << std::endl;
 
 	return 0;
 
